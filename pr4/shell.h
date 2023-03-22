@@ -93,39 +93,38 @@ class Shell {
                     if (_rutaActiva.back()->getName() != "") {
                         _rutaActiva.pop_back();
                         int pos = _ruta.find_last_of("/");
-                        if (_rutaActiva.back()->getName() == "")
+                        if (_rutaActiva.back()->getName() == "") // Mi padre es root
                             _ruta = "/";
                         else
                             _ruta = _ruta.substr(0, pos);
                     } else {
                         throw already_root();
                     }
-                } else {
-                    if (path.find("/") == 0) {
+                } else { // Es una ruta más compleja
+                    if (path.find("/") == 0) { // Hay una barra al comienzo, vamos a root primero
                         cd("/");
                         path = path.substr(1);
                     }
                     std::shared_ptr<Nodo> elem;
                     bool fin = false;
-                    while (!fin) {
+                    while (!fin) { // Mientras queden directorios en el path por recorrer
                         int pos = path.find("/");
-                        if (pos == -1) {
+                        if (pos == -1) { // Ya no quedan "/"
                             fin = true;
                         }
                         std::string name = path.substr(0, pos);
-                        if (name == ".") {
+                        if (name == ".") { // El propio directorio 
                             cd(".");
-                        } else if (name == "..") {
+                        } else if (name == "..") { // Directorio padre
                             cd("..");
-                        } else {
+                        } else { // Otro directorio, lo buscamos
                             elem = _rutaActiva.back()->findNode(name);
-                            if (elem != nullptr) {
+                            if (elem != nullptr) { // Si se ha encontrado
                                 // Si elem es un shared_ptr<Enlace>, tomamos el enlace (de forma sucesiva)
                                 while (dynamic_pointer_cast<Enlace>(elem) != nullptr) {
                                     std::shared_ptr<Enlace> ref = dynamic_pointer_cast<Enlace>(elem);
                                     elem = ref->link();
                                 }
-
                                 // Si elem es un directorio
                                 if (dynamic_pointer_cast<Directorio>(elem) != nullptr) {
                                     _rutaActiva.push_back(dynamic_pointer_cast<Directorio>(elem));
@@ -140,7 +139,7 @@ class Shell {
                             } else { // Si no se ha encontrado, excepción
                                 throw elem_not_found(name);
                             }
-                        } 
+                        } // Eliminamos del path el directorio al que se ha viajado
                         path = path.substr(pos + 1);
                     }
                 }
@@ -176,7 +175,7 @@ class Shell {
                     } else { // En cualquier otro caso, viajar a ese directorio
                         cd (dir);
                         std::shared_ptr<Nodo> elem = _rutaActiva.back()->findNode(path); // Buscar el elemento
-                        if (elem != nullptr) { // Si está, hacer el enlace y añadirlo
+                        if (elem != nullptr) { // Si está, hacer el enlace, volver y añadirlo
                             std::shared_ptr<Enlace> link = make_shared<Enlace>(name, elem);
                             cd(dirActual);
                             _rutaActiva.back()->addNode(link);
@@ -186,11 +185,11 @@ class Shell {
                         }
                     }
                 } else { // Si no hay barras de ruta ya estamos en el directorio donde esta el nodo que buscamos.
-                    // Buscamos el elemento, si existe añadimos el enlace, sino excepción
+                    // Buscamos el nodo 
                     std::shared_ptr<Nodo> elem = _rutaActiva.back()->findNode(path);
-                    if (elem != nullptr) {
+                    if (elem != nullptr) { // si existe añadimos el enlace
                         _rutaActiva.back()->addNode(make_shared<Enlace>(name, elem));
-                    } else { //Si no existe excepción
+                    } else { // Si no existe excepción
                         throw elem_not_found(name);
                     }
                 }
@@ -209,32 +208,32 @@ class Shell {
                 return size;
             } else { // Sino...
                 int pos = path.find_last_of("/");
-                if (pos != -1) {
+                if (pos != -1) { // Si se ha encontrado "/"
                     std::string dir = path.substr(0, pos);
                     path = path.substr(pos + 1);
-                    if (path == ".") {
+                    if (path == ".") { // Mismo directorio
                         return stat(dir);
-                    } else if (path == "..") {
+                    } else if (path == "..") { // Directorio padre
                         pos = dir.find_last_of("/");
                         dir = dir.substr(0, pos);
                         return stat(dir);
-                    } else {
+                    } else { // En otro caso, viajamos a ese directorio
                         cd(dir);
                         std::shared_ptr<Nodo> elem = _rutaActiva.back()->findNode(path);
-                        if (elem != nullptr) {
+                        if (elem != nullptr) { // Si existe el nodo, guardamos su tamaño y volvemos
                             int size = elem->getSize();
                             cd(dirActual);
                             return size;
-                        } else {
+                        } else { // Sino, volvemos y excepción
                             cd(dirActual);
                             throw elem_not_found(elem->getName());
                         }
                     }
-                } else {
+                } else { // Buscamos el nodo
                     std::shared_ptr<Nodo> elem = _rutaActiva.back()->findNode(path);
-                    if (elem != nullptr) {
+                    if (elem != nullptr) { // Si el nodo existe, devolvemos su tamaño
                         return elem->getSize();
-                    } else {
+                    } else { // Sino, excepción
                         throw elem_not_found(path);
                     }
                 }

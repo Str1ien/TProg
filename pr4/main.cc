@@ -48,10 +48,6 @@ int main()
 			{
 				cout << sh.ls();
 			}
-			else if (cmd[0]=="ll")
-			{
-				// cout << sh.ll();
-			}
 			else if (cmd[0]=="du")
 			{
 				cout << sh.du();
