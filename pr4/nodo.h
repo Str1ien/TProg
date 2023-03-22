@@ -21,5 +21,4 @@ class Nodo {
 
         // Devuelve el tamaño del nodo
         virtual int getSize() const = 0;
-        
 };

@@ -11,43 +11,46 @@
 #include <exception>
 #include <string>
 
-class arbol_ficheros_error {
+class arbol_ficheros_error : public std::exception {
     protected:
         std::string _aux;
     public:
         arbol_ficheros_error(const std::string& aux = "") : _aux(aux) {}
-        virtual const std::string what() const noexcept {
-            return _aux;
+        virtual const char* what() const noexcept {
+            return _aux.c_str();
         }
 };
 
 class negative_size : public arbol_ficheros_error {
     public:
         negative_size(const int sz) : arbol_ficheros_error(std::to_string(sz)) {}
-        const std::string what() const noexcept override {
-            return "Invalid parameter: size must be greater or equal to 0, was " + _aux;
+        const char* what() const noexcept override {
+            std::string s = "Invalid parameter: size must be greater or equal to 0, was " + _aux;
+            return s.c_str();
         }
 };
 
 class is_a_directory : public arbol_ficheros_error {
     public:
         is_a_directory(const std::string& dirName) : arbol_ficheros_error(dirName) {}
-        const std::string what() const noexcept override {
-            return _aux + " is a directory";
+        const char* what() const noexcept override {
+            std::string s = _aux + " is a directory";
+            return s.c_str();
         }
 };
 
 class dir_exists : public arbol_ficheros_error {
     public:
         dir_exists(const std::string& dirName) : arbol_ficheros_error(dirName) {}
-        const std::string what() const noexcept override {
-            return "The directory " + _aux + " already exists";
+        const char* what() const noexcept override {
+            std::string s = "The directory " + _aux + " already exists";
+            return s.c_str();
         }
 };
 
 class already_root : public arbol_ficheros_error {
     public:
-        const std::string what() const noexcept override {
+        const char* what() const noexcept override {
             return "Path already root, cannot cd ..";
         }
 };
@@ -55,16 +58,17 @@ class already_root : public arbol_ficheros_error {
 class is_a_file : public arbol_ficheros_error {
     public:
         is_a_file(const std::string& fileName) : arbol_ficheros_error(fileName) {}
-        const std::string what() const noexcept override {
-            return _aux + " is a file";
+        const char* what() const noexcept override {
+            std::string s = _aux + " is a file";
+            return s.c_str();
         }
 };
 
 class elem_not_found : public arbol_ficheros_error {
     public:
         elem_not_found(const std::string& elem) : arbol_ficheros_error(elem) {}
-        const std::string what() const noexcept override {
-            return _aux + " not found";
+        const char* what() const noexcept override {
+            std::string s = _aux + " not found";
+            return s.c_str();
         }
 };
-

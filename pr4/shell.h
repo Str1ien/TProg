@@ -15,8 +15,6 @@
 #include "directorio.h"
 #include "arbol_ficheros_error.h"
 
-#include <iostream>
-
 class Shell {
     private:
         std::list<std::shared_ptr<Directorio>> _rutaActiva;
