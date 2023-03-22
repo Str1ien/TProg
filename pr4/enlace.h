@@ -12,7 +12,7 @@
 
 class Enlace : public Nodo {
     private:
-        std::shared_ptr<Nodo> _ref;
+        std::shared_ptr<Nodo> _ref; // Nodo al que apunta el enlace
     public:
         // Constructor
         Enlace(const std::string& name, std::shared_ptr<Nodo> target)
@@ -23,7 +23,7 @@ class Enlace : public Nodo {
             return _ref->getSize();
         }
         
-        // Devuelve el nodo apuntado por el enlace
+        // Devuelve un puntero al nodo apuntado por el enlace
         std::shared_ptr<Nodo> link() {
             return _ref;
         }

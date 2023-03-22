@@ -14,7 +14,6 @@
 
 class Directorio : public Nodo {
     private:
-        // Directorio* _parent;
         std::list<std::shared_ptr<Nodo>> _children;    //? Hay que liberarlos en un destructor???
     public:
         // Constructor
@@ -38,6 +37,8 @@ class Directorio : public Nodo {
             _children.remove(node);
         }
 
+        // Busca un nodo en el directorio con nombre <name>. SI lo encuentra devuelve un puntero
+        // al nodo, sino devuelve nullptr
         std::shared_ptr<Nodo> findNode(const std::string& name) {
             for (const auto& i : _children) {
                 if (i->getName() == name)
@@ -47,6 +48,8 @@ class Directorio : public Nodo {
             return nullptr;
         }
     
+        // Imprime por pantalla, a uno por línea, los nombres de los nodos en el directorio
+        // (si <cmd> lo indica, se imprime también el tamaño del nodo)
         std::string print(const std::string& cmd) const {
             std::stringstream ss;
 

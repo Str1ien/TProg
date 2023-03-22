@@ -12,8 +12,9 @@
 
 class Fichero : public Nodo {
     private:
-        int _size;
+        int _size;  // Tamaño del fichero
     public:
+        // Constructor
         Fichero(const std::string& name, int size = 0) : Nodo(name), _size(size) {}
 
         //Devuelve el tamaño del fichero
@@ -21,6 +22,7 @@ class Fichero : public Nodo {
             return _size;
         }
 
+        // Actualiza el tamaño del fichero con <size>
         void updateSize(const int size) {
             _size = size;
         }

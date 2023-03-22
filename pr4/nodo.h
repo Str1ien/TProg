@@ -11,19 +11,15 @@
 
 class Nodo {
     protected:
-        std::string _name;
-        // std::shared_ptr<Nodo> _parent;
+        std::string _name;  // Nombre del nodo
     public:        
         // Constructor
         Nodo(const std::string& name) : _name(name) {}
 
-        //Devuelve el nombre del nodo
+        // Devuelve el nombre del nodo
         std::string getName() const {return _name;}
-        
-        //Devuelve el nodo padre
-        // std::string getPath() const {};
 
-        //Devuelve el tamaño del nodo
+        // Devuelve el tamaño del nodo
         virtual int getSize() const = 0;
         
 };
