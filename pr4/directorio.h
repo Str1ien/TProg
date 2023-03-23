@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <list>
 #include <sstream>
 #include <memory>
 #include <map>
