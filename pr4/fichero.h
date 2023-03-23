@@ -9,6 +9,7 @@
 
 #include "nodo.h"
 #include <memory>
+#include <string>
 
 class Fichero : public Nodo {
     private:
