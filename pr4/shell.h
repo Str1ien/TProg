@@ -164,16 +164,18 @@ class Shell {
             } else { // En cualquier otro caso
                 int pos = path.find_last_of("/");
                 if (pos != -1) { // Hay barras en el path luego hay que recorrer la ruta hasta el directorio con el nodo
-                    std::string dir = path.substr(0, pos);
+                    std::string dir;
+                    pos == 0 ? dir = "/" : dir = path.substr(0, pos);
+
                     path = path.substr(pos + 1);
                     if (path == ".") { // Si es el siguiente paso es el propio directorio
-                        ln (dir, name);
+                        ln(dir, name);
                     } else if (path == "..") { // Si el siguiente paso es el directorio padre
                         pos = dir.find_last_of("/");
                         dir = dir.substr(0, pos);
                         ln(dir, name);
                     } else { // En cualquier otro caso, viajar a ese directorio
-                        cd (dir);
+                        cd(dir);
                         std::shared_ptr<Nodo> elem = _rutaActiva.back()->findNode(path); // Buscar el elemento
                         if (elem != nullptr) { // Si está, hacer el enlace, volver y añadirlo
                             std::shared_ptr<Enlace> link = make_shared<Enlace>(name, elem);
@@ -181,7 +183,7 @@ class Shell {
                             _rutaActiva.back()->addNode(link);
                         } else { // Sino excepción
                             cd(dirActual);
-                            throw elem_not_found(name);
+                            throw elem_not_found(path);
                         }
                     }
                 } else { // Si no hay barras de ruta ya estamos en el directorio donde esta el nodo que buscamos.
@@ -190,7 +192,7 @@ class Shell {
                     if (elem != nullptr) { // si existe añadimos el enlace
                         _rutaActiva.back()->addNode(make_shared<Enlace>(name, elem));
                     } else { // Si no existe excepción
-                        throw elem_not_found(name);
+                        throw elem_not_found(path);
                     }
                 }
             }
